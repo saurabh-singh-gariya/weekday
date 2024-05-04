@@ -1,29 +1,45 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import JobCard from "../components/JobCard";
+import JobCard from "../components/JobCard/JobCard";
 import { fetchJobList } from "../store/slice/JobListSlice";
 import "./Jobs.css";
-import { CircularProgress } from "@mui/material";
+import Loading from "../components/Loading/Loading";
 
 const Jobs = () => {
+  const PAGE_LIMIT = 10;
   const dispatch = useDispatch();
+  const [currentLoaded, setCurrentLoaded] = useState(0);
   useEffect(() => {
-    dispatch(fetchJobList(0));
+    dispatch(fetchJobList({ offset: currentLoaded, limit: PAGE_LIMIT }));
+  }, [currentLoaded]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
   }, []);
+
+  const handleScroll = () => {
+    console.log("Scroll");
+    const height = document.documentElement.scrollHeight;
+    const top = document.documentElement.scrollTop;
+    const innerHeight = window.innerHeight;
+    if (innerHeight + top + 1 >= height) {
+      setCurrentLoaded((prev) => prev + PAGE_LIMIT);
+    }
+  };
+
   const jobsList = useSelector((state) => state?.jobs?.jobList);
   const listLoading = useSelector((state) => state?.jobs?.loading);
   return (
     <div className="container">
       <div className="filter-container"></div>
       {listLoading && jobsList?.length === 0 ? (
-        <div className="progress-container">
-          <CircularProgress />
-        </div>
+        <Loading />
       ) : (
         <div className="card-container">
           {jobsList?.map((job, index) => (
             <JobCard key={job?.jdUid ?? index} jobDetails={job} />
           ))}
+          {listLoading && <Loading />}
         </div>
       )}
     </div>

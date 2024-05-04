@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchJobList = createAsyncThunk(
   "jobList/fetchJobList",
-  async (offset, { rejectWithValue }) => {
+  async ({ offset, limit }, { rejectWithValue }) => {
     try {
       const URL = "https://api.weekday.technology/adhoc/getSampleJdJSON";
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       const body = JSON.stringify({
-        limit: 20,
+        limit,
         offset,
       });
       const requestOptions = {
