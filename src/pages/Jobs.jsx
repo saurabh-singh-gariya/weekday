@@ -18,7 +18,9 @@ const Jobs = () => {
   }, []);
 
   const handleScroll = () => {
-    console.log("Scroll");
+    if (currentLoaded > totalCount) {
+      return;
+    }
     const height = document.documentElement.scrollHeight;
     const top = document.documentElement.scrollTop;
     const innerHeight = window.innerHeight;
@@ -29,6 +31,8 @@ const Jobs = () => {
 
   const jobsList = useSelector((state) => state?.jobs?.jobList);
   const listLoading = useSelector((state) => state?.jobs?.loading);
+  const totalCount = useSelector((state) => state?.jobs?.totalCount);
+
   return (
     <div className="container">
       <div className="filter-container"></div>

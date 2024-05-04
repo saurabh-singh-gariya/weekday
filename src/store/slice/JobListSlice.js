@@ -33,6 +33,7 @@ const initialState = {
   jobList: [],
   loading: false,
   error: null,
+  totalCount: 0,
 };
 
 export const jobListSlice = createSlice({
@@ -50,6 +51,7 @@ export const jobListSlice = createSlice({
     builder.addCase(fetchJobList.fulfilled, (state, action) => {
       state.loading = false;
       state.jobList = [...state.jobList, ...action.payload.jdList];
+      state.totalCount = action.payload.totalCount;
     });
   },
 });
