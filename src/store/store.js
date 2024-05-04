@@ -3,7 +3,7 @@ import jobListReducer from "./slice/JobListSlice";
 
 export const Appstore = configureStore({
   reducer: {
-    jobList: jobListReducer,
+    jobs: jobListReducer,
   },
 });
 

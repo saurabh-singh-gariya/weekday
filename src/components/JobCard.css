@@ -1,0 +1,30 @@
+.company-details {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+.info-container > h3 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+  color: #8b8b8b;
+}
+
+.info-container > h2 {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card-main {
+  height: 400px;
+  width: 300px;
+}
+
+.card-body {
+  height: 80%;
+}
+.card-footer {
+  height: 20%;
+}

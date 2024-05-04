@@ -8,7 +8,7 @@ export const fetchJobList = createAsyncThunk(
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       const body = JSON.stringify({
-        limit: 10,
+        limit: 20,
         offset,
       });
       const requestOptions = {
@@ -41,8 +41,7 @@ export const jobListSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchJobList.pending, (state, action) => {
-      const newState = { ...state, loading: true };
-      state = newState;
+      state.loading = true;
     });
     builder.addCase(fetchJobList.rejected, (state, action) => {
       state.loading = false;
