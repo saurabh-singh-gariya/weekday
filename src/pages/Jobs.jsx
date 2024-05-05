@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useMemo, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector, useDispatch } from "react-redux";
 import JobCard from "../components/JobCard/JobCard";
 import { fetchJobList } from "../store/slice/JobListSlice";
@@ -12,7 +13,6 @@ const Jobs = () => {
   const PAGE_LIMIT = 10;
   const dispatch = useDispatch();
 
-  const [currentLoaded, setCurrentLoaded] = useState(0);
   const [filteredList, setFilteredList] = useState([]);
   const [filterCriterias, setFilterCriterias] = useState({
     role: "",
@@ -28,19 +28,18 @@ const Jobs = () => {
   const totalCount = useSelector((state) => state?.jobs?.totalCount);
 
   useEffect(() => {
-    dispatch(fetchJobList({ offset: currentLoaded, limit: PAGE_LIMIT }));
-  }, [currentLoaded]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    dispatch(fetchJobList({ offset: jobsList?.length, limit: PAGE_LIMIT }));
   }, []);
+
+  //   useEffect(() => {
+  //     window.addEventListener("scroll", handleScroll);
+  //   }, []);
 
   useEffect(() => {
     if (filterNotApplied) {
       setFilteredList(jobsList);
     } else {
       setFilteredList(getFilteredList(jobsList, filterCriterias));
-      handleScroll();
     }
   }, [jobsList, filterCriterias]);
 
@@ -48,19 +47,23 @@ const Jobs = () => {
     setFilterCriterias(filterCriterias);
   }, []);
 
-  const handleScroll = () => {
-    if (currentLoaded > totalCount) {
-      return;
-    }
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const bottom = documentHeight - (scrollTop + windowHeight);
-    const threshold = 100;
+  //   const handleScroll = () => {
+  //     if (currentLoaded > totalCount) {
+  //       return;
+  //     }
+  //     const windowHeight = window.innerHeight;
+  //     const documentHeight = document.documentElement.scrollHeight;
+  //     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  //     const bottom = documentHeight - (scrollTop + windowHeight);
+  //     const threshold = 100;
 
-    if (bottom < threshold) {
-      setCurrentLoaded((prev) => prev + PAGE_LIMIT);
-    }
+  //     if (bottom < threshold) {
+  //       setCurrentLoaded((prev) => prev + PAGE_LIMIT);
+  //     }
+  //   };
+
+  const fetchMoreData = () => {
+    dispatch(fetchJobList({ offset: jobsList?.length, limit: PAGE_LIMIT }));
   };
 
   const filterNotApplied = useMemo(() => {
@@ -76,12 +79,17 @@ const Jobs = () => {
       {listLoading && filteredList?.length === 0 ? (
         <Loading />
       ) : (
-        <div className="card-container">
+        <InfiniteScroll
+          className="card-container"
+          dataLength={jobsList?.length}
+          next={fetchMoreData}
+          hasMore={jobsList?.length < totalCount}
+          loader={<Loading />}
+        >
           {filteredList?.map((job, index) => (
             <JobCard key={job?.jdUid ?? index} jobDetails={job} />
           ))}
-          {listLoading && <Loading />}
-        </div>
+        </InfiniteScroll>
       )}
     </div>
   );

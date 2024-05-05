@@ -1,18 +1,4 @@
-.container {
-  width: 90%;
-  margin: auto;
-}
-
-.filter-container {
-  height: 60px;
-  width: 100%;
-  background-color: blue;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-.card-container {
+    .card-container {
   margin-top: 20px;
   width: 100%;
   display: flex;
@@ -20,4 +6,9 @@
   flex-wrap: wrap;
   gap: 1.2rem;
   justify-content: space-between;
+  padding: 20px 50px;
 }
+
+/* .card-container::-webkit-scrollbar {
+  display: none;
+} */
